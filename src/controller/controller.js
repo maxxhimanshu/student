@@ -3,9 +3,9 @@ const userModel = require("../model/user")
 const jwt = require("jsonwebtoken")
 // const bcrypt = require("bcrypt")
 
-const add_user = async (req, res) => {
+const user = async (req, res) => {
     try {
-        console.log(req.body)
+        // console.log(req.body)
         if (!req.body) return res.status(400).send({ status: false, message: "please provide name,email and password" })
 
         const { name, email, password } = req.body
@@ -21,12 +21,13 @@ const add_user = async (req, res) => {
         // let saltRounds = await bcrypt.genSalt(10)
         // let encryptedPassword = await bcrypt.hash(password, saltRounds)
         // req.body.password = encryptedPassword
-        console.log(req.body)
+        // console.log(req.body)
         const createdUser = await userModel.create(req.body)
-        // console.log(createdUser)
+        console.log(createdUser)
         return res.status(201).send(createdUser)
     } catch (error) {
-        res.send(error)
+        console.log(error.message)
+        res.status(400).send(error.message)
     }
 }
 
@@ -51,7 +52,7 @@ const login = async (req, res) => {
     }
 }
 
-const add_Student = async (req, res) => {
+const student = async (req, res) => {
     try {
         // console.log(req.body)
         const { name, subject, marks } = req.body
@@ -71,7 +72,7 @@ const add_Student = async (req, res) => {
         res.send(error)
     }
 }
-const get_Student = async (req, res) => {
+const getStudent = async (req, res) => {
     try {
         if (req.query.id) {
             const findStudents = await studentModel.findOne({ userId: req.userId, _id: req.query.id })
@@ -84,7 +85,7 @@ const get_Student = async (req, res) => {
         res.send(error)
     }
 }
-const update_student = async (req, res) => {
+const updateStudent = async (req, res) => {
     try {
         if (!req.body) return res.send({ status: false, message: "body required" })
         const id = req.params.id
@@ -101,7 +102,7 @@ const update_student = async (req, res) => {
     }
 }
 
-const delete_student = async (req, res) => {
+const deleteStudent = async (req, res) => {
     try {
         const id = req.params.id
         console.log(id)
@@ -115,4 +116,4 @@ const delete_student = async (req, res) => {
     }
 }
 
-module.exports = { add_user, login, add_Student, get_Student, update_student, delete_student }
+module.exports = { user, login, student, getStudent, updateStudent, deleteStudent }
